@@ -1,0 +1,55 @@
+<DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
+<title>NSCODE UPLOAD TASK</title> 
+</head>
+
+<body>
+<input type="file" class="inputFile" id="fileInput"  />
+<label for="fileInp" >@</label>
+<button id="upload">upload</button>
+ 
+    <script type="module">
+       
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
+    import { getStorage, ref, uploadBytes,getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-storage.js";
+
+    const firebaseConfig = {
+        apiKey: 'AIzaSyB--Ygc5-wJBBgNfsvsMwPkuhBbYnVfrRk',
+        authDomain: 'aptitude-e4149.firebaseapp.com',
+        projectId: 'aptitude-e4149',
+        storageBucket: 'aptitude-e4149.appspot.com',
+        messagingSenderId: '947837210200',
+        appId: '1:947837210200:web:555c24f75f73c10da0442d'
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+
+    document.getElementById('upload').addEventListener('click', (e) => {
+        
+
+        const pdfFile = document.getElementById("fileInput").files[0];
+        const storageRef = ref(storage, "aptitude/" + pdfFile.name); // Creating a reference to the file's location
+        const uploadTask = uploadBytes(storageRef, pdfFile); // Uploading the file
+
+        uploadTask.then((snapshot) => {
+        console.log('File uploaded successfully');
+        // Get the download URL of the uploaded file
+        getDownloadURL(snapshot.ref)
+            .then((downloadURL) => {
+                console.log('Download URL:', downloadURL);
+            })
+            .catch((error) => {
+                console.error('Error getting download URL:', error);
+            });
+    }).catch((error) => {
+        console.error('Error uploading file:', error);
+    });
+    });
+</script>
+</body>
+</html>
